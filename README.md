@@ -4,6 +4,8 @@ An online fitness class booking, ticketing and event management application.
 
 This project has been developed as part of a computer science degree final year dissertation. The project brings together the many skills I have gained throughout education and also through autodidactism (self-learning).
 
+This application is in development, due to be released by May 2018. Any and all details identified within this readme may be subject to change.
+
 # Download
 Not yet available on playstore
 
