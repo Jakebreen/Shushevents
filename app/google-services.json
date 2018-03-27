@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "950671830098",
+    "firebase_url": "https://shushevents-9eb1b.firebaseio.com",
+    "project_id": "shushevents-9eb1b",
+    "storage_bucket": "shushevents-9eb1b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950671830098:android:4d6d9db59513694e",
+        "android_client_info": {
+          "package_name": "uk.co.jakebreen.shushevents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950671830098-t11u39bihbp0iqi2c7je4m4cn8a8ka44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uk.co.jakebreen.shushevents",
+            "certificate_hash": "58b90eae5830a8220f20aaf6a1e679a8ecb982ea"
+          }
+        },
+        {
+          "client_id": "950671830098-l7ptdsgu9geg11tm4o9eis08em66r5v6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACoGFTCNXIRIi4dynCjDN4I1fzjcYplps"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950671830098-l7ptdsgu9geg11tm4o9eis08em66r5v6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

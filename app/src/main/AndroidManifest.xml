@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="uk.co.jakebreen.shushevents">
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Crashlytics enabled or disabled -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.SignupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.FindEventsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.EventslistActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="${applicationId}.braintree" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".view.impl.EventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.RegisterAccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.CreateEventActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.AdminActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.AdminRolePermission"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <service android:name=".data.remote.BackgroundService" />
+
+        <activity
+            android:name=".view.impl.EventTicketOrder"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.impl.ResetPassword"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.impl.AccountMenuActivity"
+            android:screenOrientation="portrait"/>
+    </application>
+
+</manifest>

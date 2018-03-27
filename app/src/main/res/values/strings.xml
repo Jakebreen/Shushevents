@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name">ShushEvents</string>
+
+
+
+    <string-array name="event_repeat_weeks_arrays">
+        <item>Once</item>
+        <item>2 weeks</item>
+        <item>3 weeks</item>
+        <item>4 weeks</item>
+        <item>5 weeks</item>
+        <item>6 weeks</item>
+        <item>7 weeks</item>
+        <item>8 weeks</item>
+    </string-array>
+
+    <string-array name="duration_arrays">
+        <item>1 hour</item>
+        <item>1 hour 15 minutes</item>
+        <item>1 hour 30 minutes</item>
+        <item>1 hour 45 minutes</item>
+        <item>2 hours</item>
+        <item>2 hours 15 minutes</item>
+        <item>2 hours 30 minutes</item>
+        <item>2 hours 45 minutes</item>
+    </string-array>
+
+    <string-array name="event_ticket_purchase">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <!--AppBar Menu-->
+    <string name="item_myAccount">Account settings</string>
+    <string name="item_admin">Administrator</string>
+    <string name="item_login">Login</string>
+    <string name="item_logout">Logout</string>
+
+    <!--FindEventsActivity-->
+    <string name="tv_welcome">Welcome!</string>
+    <string name="tv_find_event">Lets start by finding classes near you...</string>
+    <string name="et_town">town/postcode</string>
+    <string name="btn_find_events">FIND CLASSES</string>
+    <string name="tv_discover"><u>Discover our vision</u></string>
+
+    <!--FindEventsActivity-->
+    <string name="tv_ourClasses">Our classes near</string>
+    <string name="tv_changeLocation">Change location?</string>
+
+    <!--RegisterAccountActivity-->
+    <string name="tv_createAccount">Create your account and start enjoying our classes!</string>
+    <string name="et_registerEmail">email</string>
+    <string name="et_registerPasswordFirst">password</string>
+    <string name="et_registerPasswordSecond">repeat password</string>
+    <string name="et_registerFirstname">firstname</string>
+    <string name="et_registerSurname">surname</string>
+    <string name="btn_registerAccount">CREATE ACCOUNT</string>
+
+    <!--LoginActivity-->
+    <string name="tv_loginMessage">Login or create your account</string>
+    <string name="et_loginEmail">email</string>
+    <string name="et_loginPassword">password</string>
+    <string name="tv_loginRegister">Not registered?</string>
+    <string name="tv_loginReset">Recover password</string>
+    <string name="btn_login">LOGIN</string>
+
+    <!--CreateEventActivity-->
+    <string name="tv_createEvent">Design and publish a new event</string>
+    <string name="tv_createEventTip">Leave max tickets empty for unlimited tickets</string>
+    <string name="et_createEventTitle">title</string>
+    <string name="et_createEventDescription">description</string>
+    <string name="et_createEventTicketPrice">ticket fee</string>
+    <string name="et_createEventTicketMax">max tickets</string>
+    <string name="et_createEventVenue">Venue</string>
+    <string name="tv_createEventDuration">Duration</string>
+    <string name="et_createEventPublish">Share event to facebook</string>
+    <string name="tv_createEventInstructor">Select instructor</string>
+    <string name="tv_createEventRepeat">You can choose to repeat this class each week by selecting the number of weeks this class will run for</string>
+    <string name="btn_createEventPublish">PUBLISH</string>
+
+    <!--AdminRolePermissionActivity-->
+    <string name="tv_adminRolePermissionTitle">Assign user roles and permissions</string>
+    <string name="tv_adminRolePermissionFindUser">Search for user by email</string>
+    <string name="et_adminRolePermissionFindUserHint">email</string>
+    <string name="tv_adminRolePermissionList">Select role</string>
+    <string name="btn_adminRolePermissionUpdate">UPDATE</string>
+
+    <!--AdminActivity-->
+    <string name="tv_adminRoleTitle">Roles and permissions</string>
+    <string name="tv_adminRoleDescription">Assign user roles, create roles and issue permissions</string>
+    <string name="tv_adminCreateEventTitle">Create an event</string>
+    <string name="tv_adminCreateEventDescription">Design and publish a new event</string>
+    <string name="btn_adminCreateEventDatePicker">Date and time</string>
+    <string name="tv_adminEditEventTitle">Update an event</string>
+    <string name="tv_adminEditEventDescription">Update or remove an existing event</string>
+
+    <!--Dialog Venue Picker-->
+    <string name="tv_dialogVenuePickVenue">Select an existing venue</string>
+    <string name="tv_dialogVenueCreateVenue">Create a new venue</string>
+    <string name="et_dialogVenueCreateVenueHandle">venue name</string>
+    <string name="et_dialogVenueCreateVenueAddress">address</string>
+    <string name="et_dialogVenueCreateVenueTown">town</string>
+    <string name="et_dialogVenueCreateVenuePostcode">postcode</string>
+    <string name="tv_dialogVenueTip">Hold and drag marker to position</string>
+    <string name="btn_dialogVenueCreateClose">CANCEL</string>
+    <string name="btn_dialogVenueCreateCreate">CREATE</string>
+    <string name="btn_dialogVenueSelect">SELECT VENUE</string>
+
+    <!--EventActivity-->
+    <string name="btn_joinClass">JOIN CLASS</string>
+    <string name="tv_yogaWithInstructor">Yoga with </string>
+
+    <!--EventTicketOrderActivity-->
+    <string name="tv_ticketOrderBuyYourTickets">Buy your tickets in advance</string>
+    <string name="tv_ticketOrderEventDetails">Class information</string>
+    <string name="tv_ticketOrderTicketDetails">Purchase tickets</string>
+    <string name="tv_ticketOrderTicketSelect">Number of tickets to purchase:</string>
+    <string name="btn_ticketOrderPurchase">BUY TICKETS</string>
+
+    <!--Braintree-->
+    <string name="token_failed">Fail to retrieve client token </string>
+
+    <!--ResetPasswordActivity-->
+    <string name="tv_resetMessage">We\'ll send you an email with a link to safely reset your password</string>
+    <string name="btn_resetSubmit">SEND NEW PASSWORD</string>
+
+    <!--AccountMenuActivity-->
+    <string name="tv_accountMenuResetTitle">Reset password</string>
+    <string name="tv_accountMenuResetDecription">Retrieve a new password for your account</string>
+
+</resources>
