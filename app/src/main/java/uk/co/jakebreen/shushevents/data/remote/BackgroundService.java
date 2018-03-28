@@ -39,9 +39,6 @@ public class BackgroundService extends IntentService {
     private String switchValue = null;
     private Bundle bundle;
 
-    public static final String PARAM_IN_MSG = "imsg";
-    public static final String PARAM_OUT_MSG = "omsg";
-
     public BackgroundService() {
         super("BackgroundService");
     }

@@ -3,6 +3,8 @@
 
     <item android:title="@string/item_login"
         android:id="@+id/item_login"/>
+    <item android:title="@string/item_events"
+        android:id="@+id/item_events"/>
     <item android:title="@string/item_myAccount"
         android:id="@+id/item_settings"/>
     <item android:title="@string/item_admin"

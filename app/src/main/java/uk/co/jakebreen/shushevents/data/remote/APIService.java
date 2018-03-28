@@ -94,4 +94,8 @@ public interface APIService {
     @FormUrlEncoded
     Call<String> getRemainingTickets(@Field("idevent") int idevent);
 
+    @POST("android/shushevents/select/selectPaidEventsByUserID.php")
+    @FormUrlEncoded
+    Call<List<Ticket>> getPaidEventByUserID(@Field("userid") String userid);
+
 }

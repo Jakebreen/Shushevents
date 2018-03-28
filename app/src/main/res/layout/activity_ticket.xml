@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_full"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".view.impl.TicketActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_templogo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="25dp"
+        android:layout_weight="1"
+        android:background="@drawable/ticket_backrgound"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/tv_ticketEventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="event title"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/tv_ticketDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="date time"
+            android:textSize="@dimen/text_small" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/tv_ticketTicketNum"
+                android:textSize="@dimen/text_small" />
+
+            <TextView
+                android:id="@+id/tv_ticketTicketNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="num"
+                android:textSize="@dimen/text_small" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_ticketCustomerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/tv_ticketTxid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="txid"
+            android:textSize="@dimen/text_small" />
+
+        <TextView
+            android:id="@+id/tv_ticketDateTimePurchase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="date time purchase"
+            android:textSize="@dimen/text_small" />
+
+    </LinearLayout>
+
+</LinearLayout>

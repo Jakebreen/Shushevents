@@ -95,10 +95,16 @@
         <activity
             android:name=".view.impl.EventTicketOrder"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.impl.ResetPassword"
+        <activity
+            android:name=".view.impl.ResetPassword"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.impl.AccountMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.impl.TicketActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.impl.AccountMenuActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".view.impl.MyEventListActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

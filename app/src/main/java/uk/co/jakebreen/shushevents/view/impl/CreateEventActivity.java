@@ -330,6 +330,11 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         LatLng latLng =  mPresenter.getLocation(postcode, this);
 
         if (latLng != null) {
+            lat = latLng.latitude;
+            lng = latLng.longitude;
+        }
+
+        if (latLng != null) {
             mMap.clear();
             mMap.addMarker(new MarkerOptions().position(latLng)
                     .title("Venue").draggable(true));

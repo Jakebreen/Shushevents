@@ -337,10 +337,12 @@ public final class EventTicketOrder extends BaseActivity<EventTicketOrderPresent
                 mPresenter.sendTicket(userid, idevent, txid, date, selectedTicketTotal);
                 Log.d(TAG, "TicketOutput " + selectedTicketTotal);
 
-                showToast("Payment method accepted");
+                showToast("Payment accepted, view your tickets in menu option \"My classes\".");
                 hideDialog();
 
                 paymentInProgress = false;
+
+                finish();
             }
         });
     }

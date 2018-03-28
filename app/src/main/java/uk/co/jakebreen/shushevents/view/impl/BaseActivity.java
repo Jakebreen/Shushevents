@@ -111,6 +111,12 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
         mFirstStart = false;
 
         ButterKnife.bind(this);
+
+        // toolbar back button
+        //if (getSupportActionBar() != null) {
+        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //    getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //}
     }
 
     @Override
@@ -176,6 +182,10 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.item_events:
+                intent = new Intent(this, MyEventListActivity.class);
+                startActivity(intent);
+                break;
             case R.id.item_settings:
                 intent = new Intent(this, AccountMenuActivity.class);
                 startActivity(intent);
@@ -201,23 +211,27 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // 0 login
-        // 1 account settings
-        // 2 admin settings
-        // 3 logout
+        // 1 my classes
+        // 2 account settings
+        // 3 admin settings
+        // 4 logout
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             menu.getItem(0).setVisible(true);
-            menu.getItem(2).setVisible(false);
+            menu.getItem(1).setVisible(false);
+            menu.getItem(2).setVisible(true);
             menu.getItem(3).setVisible(false);
+            menu.getItem(4).setVisible(false);
         } else {
             menu.getItem(0).setVisible(false);
-            menu.getItem(3).setVisible(true);
+            menu.getItem(1).setVisible(true);
+            menu.getItem(4).setVisible(true);
         }
 
         //roleID 1 is a No Permission user
         if (getDefaultsInt("userRoleID") > 1) {
-            menu.getItem(2).setVisible(true);
+            menu.getItem(3).setVisible(true);
         } else {
-            menu.getItem(2).setVisible(false);
+            menu.getItem(3).setVisible(false);
         }
 
         return super.onPrepareOptionsMenu(menu);
@@ -279,4 +293,5 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
     public void hideDialog() {
         mProgressDialog.hide();
     }
+
 }

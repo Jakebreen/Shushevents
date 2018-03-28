@@ -38,6 +38,7 @@
     <string name="item_admin">Administrator</string>
     <string name="item_login">Login</string>
     <string name="item_logout">Logout</string>
+    <string name="item_events">My classes</string>
 
     <!--FindEventsActivity-->
     <string name="tv_welcome">Welcome!</string>
@@ -121,7 +122,7 @@
     <string name="btn_ticketOrderPurchase">BUY TICKETS</string>
 
     <!--Braintree-->
-    <string name="token_failed">Fail to retrieve client token </string>
+    <string name="token_failed">Failed to retrieve client token </string>
 
     <!--ResetPasswordActivity-->
     <string name="tv_resetMessage">We\'ll send you an email with a link to safely reset your password</string>
@@ -130,5 +131,13 @@
     <!--AccountMenuActivity-->
     <string name="tv_accountMenuResetTitle">Reset password</string>
     <string name="tv_accountMenuResetDecription">Retrieve a new password for your account</string>
+
+    <!--TicketActivity-->
+    <string name="tv_ticketTicketNum">Admits</string>
+    <string name="tv_ticketUserName">Buyer</string>
+
+    <!--MyEventListActivity-->
+    <string name="tv_myEventsTitle">My upcoming classes</string>
+    <string name="tv_myEventsAdmittance">Admits</string>
 
 </resources>

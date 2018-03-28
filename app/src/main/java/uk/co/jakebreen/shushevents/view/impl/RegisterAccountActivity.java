@@ -134,6 +134,7 @@ public final class RegisterAccountActivity extends BaseActivity<RegisterAccountP
 
     public void getCurrentAccount() {
         Intent intent = new Intent(this, BackgroundService.class);
+        intent.putExtra("switchValue", "account");
         startService(intent);
 
         Log.d("responseReceiverX", "getCurrentAccount RegisterActivity");

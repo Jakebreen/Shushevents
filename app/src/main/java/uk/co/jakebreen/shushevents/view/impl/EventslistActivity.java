@@ -191,7 +191,6 @@ public final class EventslistActivity extends BaseActivity<EventslistPresenter, 
                     intent.putExtra("event", (Serializable) selectedEvent);
                     startActivity(intent);
 
-                    //mPresenter.getRoles();
                 }
             });
 
