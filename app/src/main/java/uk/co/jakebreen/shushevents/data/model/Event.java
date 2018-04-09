@@ -50,6 +50,15 @@ public class Event implements Serializable {
     @SerializedName("entrants")
     @Expose
     private int entrants;
+    @SerializedName("instructorFirstname")
+    @Expose
+    private String instructorFirstname;
+    @SerializedName("instructorSurname")
+    @Expose
+    private String instructorSurname;
+    @SerializedName("venueHandle")
+    @Expose
+    private String venueHandle;
 
     public int getIdevent() {
         return idevent;
@@ -153,6 +162,30 @@ public class Event implements Serializable {
 
     public void setEntrants(int entrants) {
         this.entrants = entrants;
+    }
+
+    public String getInstructorFirstname() {
+        return instructorFirstname;
+    }
+
+    public void setInstructorFirstname(String instructorFirstname) {
+        this.instructorFirstname = instructorFirstname;
+    }
+
+    public String getInstructorSurname() {
+        return instructorSurname;
+    }
+
+    public void setInstructorSurname(String instructorSurname) {
+        this.instructorSurname = instructorSurname;
+    }
+
+    public String getVenueHandle() {
+        return venueHandle;
+    }
+
+    public void setVenueHandle(String venueHandle) {
+        this.venueHandle = venueHandle;
     }
 
     @Override

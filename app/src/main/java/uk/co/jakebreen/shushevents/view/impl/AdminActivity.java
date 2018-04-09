@@ -95,4 +95,10 @@ public final class AdminActivity extends BaseActivity<AdminPresenter, AdminView>
         startActivity(intent);
     }
 
+    @OnClick(R.id.ll_adminEditEvent)
+    public void onClickAdminEditEvent() {
+        Intent intent = new Intent(this, UpdateEventActivity.class);
+        startActivity(intent);
+    }
+
 }

@@ -140,4 +140,12 @@
     <string name="tv_myEventsTitle">My upcoming classes</string>
     <string name="tv_myEventsAdmittance">Admits</string>
 
+    <!--UpdateEventActivity-->
+    <string name="tv_adminCancelEventTitle">Cancel an upcoming class</string>
+    <string name="tv_adminCancelEventDescription">Cancel and refund a class</string>
+
+    <!--CancelEventActivity-->
+    <string name="tv_cancelEventSearch">Search for classes</string>
+    <string name="tv_cancelEventSelect">Select event to cancel</string>
+
 </resources>

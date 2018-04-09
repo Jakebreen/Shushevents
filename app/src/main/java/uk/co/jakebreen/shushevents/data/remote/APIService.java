@@ -98,4 +98,12 @@ public interface APIService {
     @FormUrlEncoded
     Call<List<Ticket>> getPaidEventByUserID(@Field("userid") String userid);
 
+    @POST("android/shushevents/select/selectEventByDate.php")
+    @FormUrlEncoded
+    Call<List<Event>> getEventByDate(@Field("date") String date);
+
+    @POST("android/shushevents/braintreepayments/ticketRefund.php")
+    @FormUrlEncoded
+    Call<String> cancelEvent(@Field("eventId") int eventid);
+
 }

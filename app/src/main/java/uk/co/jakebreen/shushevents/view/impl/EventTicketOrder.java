@@ -59,6 +59,7 @@ public final class EventTicketOrder extends BaseActivity<EventTicketOrderPresent
     private static final String PATH_TO_SERVER = "http://www.jakebreen.co.uk/android/shushevents/braintreepayments/index.php";
     private static final int BRAINTREE_REQUEST_CODE = 4949;
     protected FirebaseUser user;
+
     @Inject
     PresenterFactory<EventTicketOrderPresenter> mPresenterFactory;
     @BindView(R.id.tv_eventTicketOrderTitle)
