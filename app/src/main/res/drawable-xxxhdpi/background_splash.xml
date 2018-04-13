@@ -28,6 +28,6 @@
         android:bottom="200dp"
         android:left="100dp"
         android:right="100dp"
-        android:drawable="@drawable/ic_templogo" />
+        android:drawable="@drawable/logo" />
 
 </layer-list>

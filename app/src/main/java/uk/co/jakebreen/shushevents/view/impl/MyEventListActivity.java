@@ -110,6 +110,7 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
             TextView tvEventTime = (TextView) convertView.findViewById(R.id.tv_eventTime);
             TextView tvEventTicketPrice = (TextView) convertView.findViewById(R.id.tv_eventTicketPrice);
             TextView tvEventPersonsPaid = (TextView) convertView.findViewById(R.id.tv_eventPersonsPaid);
+            TextView tvEventTicketCancelled = (TextView) convertView.findViewById(R.id.tv_eventTicketCancelled);
 
             // Populate the data into the template view using the data object
             tvEventTitle.setText(ticket.getTitle());
@@ -117,6 +118,10 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
             tvEventTime.setText(ticket.getTime());
             tvEventTicketPrice.setText(ticket.getEntryFee());
             tvEventPersonsPaid.setText(String.valueOf(ticket.getEntrants()));
+
+            if (ticket.getRefunded() == 1) {
+                tvEventTicketCancelled.setText("This class has been cancelled and your ticket has been refunded, apologies for any inconvenience caused.");
+            }
 
             // Return the completed view to render on screen
 

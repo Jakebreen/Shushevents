@@ -85,7 +85,7 @@ public final class CancelEventActivity extends BaseActivity<CancelEventPresenter
     protected void onStart() {
         super.onStart();
 
-        getClientTokenFromServer();
+        //getClientTokenFromServer();
     }
 
     @Override
@@ -156,6 +156,7 @@ public final class CancelEventActivity extends BaseActivity<CancelEventPresenter
             TextView tvEventEntrants = (TextView) convertView.findViewById(R.id.tv_eventTicketEntrants);
             TextView tvEventInstructorName = (TextView) convertView.findViewById(R.id.tv_eventInstructorName);
             TextView tvEventVenueHandle = (TextView) convertView.findViewById(R.id.tv_eventVenueHandle);
+
 
             String formattedDistance = String.format("%.02f", event.getDistance());
 

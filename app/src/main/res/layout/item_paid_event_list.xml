@@ -70,6 +70,13 @@
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_eventTicketCancelled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/bt_error_red"/>
+
         </LinearLayout>
 
         <LinearLayout

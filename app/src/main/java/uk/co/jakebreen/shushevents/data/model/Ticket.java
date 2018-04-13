@@ -51,6 +51,9 @@ public class Ticket implements Serializable {
     @SerializedName("surname")
     @Expose
     private String surname;
+    @SerializedName("refunded")
+    @Expose
+    private int refunded;
 
     public int getIdticket() {
         return idticket;
@@ -156,6 +159,14 @@ public class Ticket implements Serializable {
         this.surname = surname;
     }
 
+    public int getRefunded() {
+        return refunded;
+    }
+
+    public void setRefunded(int refunded) {
+        this.refunded = refunded;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -172,6 +183,7 @@ public class Ticket implements Serializable {
                 ", entrants=" + entrants +
                 ", firstname='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
+                ", refunded=" + refunded +
                 '}';
     }
 }

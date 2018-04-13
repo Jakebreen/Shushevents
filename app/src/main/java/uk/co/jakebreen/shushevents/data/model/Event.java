@@ -59,6 +59,9 @@ public class Event implements Serializable {
     @SerializedName("venueHandle")
     @Expose
     private String venueHandle;
+    @SerializedName("visible")
+    @Expose
+    private int visible;
 
     public int getIdevent() {
         return idevent;
@@ -188,6 +191,14 @@ public class Event implements Serializable {
         this.venueHandle = venueHandle;
     }
 
+    public int getVisible() {
+        return visible;
+    }
+
+    public void setVisible(int visible) {
+        this.visible = visible;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -204,6 +215,10 @@ public class Event implements Serializable {
                 ", venueid=" + venueid +
                 ", distance=" + distance +
                 ", entrants=" + entrants +
+                ", instructorFirstname='" + instructorFirstname + '\'' +
+                ", instructorSurname='" + instructorSurname + '\'' +
+                ", venueHandle='" + venueHandle + '\'' +
+                ", visible=" + visible +
                 '}';
     }
 }

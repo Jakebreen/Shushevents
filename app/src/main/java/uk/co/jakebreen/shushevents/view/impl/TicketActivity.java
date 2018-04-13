@@ -23,7 +23,7 @@ public final class TicketActivity extends BaseActivity<TicketPresenter, TicketVi
     private Ticket mTicket;
 
     TextView tvTicketEventTitle, tvTicketDateTime, tvTicketTicketNum, tvTicketCustomerName,
-            tvTicketTxid, tvTicketDateTimePurchase, tvEventPersonsPaid;
+            tvTicketTxid, tvTicketDateTimePurchase, tvEventPersonsPaid, tvTicketCancelled;
 
     // Your presenter is available using the mPresenter variable
 
@@ -39,6 +39,7 @@ public final class TicketActivity extends BaseActivity<TicketPresenter, TicketVi
         tvTicketTxid = (TextView) findViewById(R.id.tv_ticketTxid);
         tvTicketDateTimePurchase = (TextView) findViewById(R.id.tv_ticketDateTimePurchase);
         tvEventPersonsPaid = (TextView) findViewById(R.id.tv_eventPersonsPaid);
+        tvTicketCancelled = (TextView) findViewById(R.id.tv_ticketCancelled);
 
         Intent intent = getIntent();
         mTicket = (Ticket) intent.getSerializableExtra("ticket");
@@ -71,6 +72,9 @@ public final class TicketActivity extends BaseActivity<TicketPresenter, TicketVi
         tvTicketCustomerName.setText(mTicket.getFirstname() + " " + mTicket.getSurname());
         tvTicketTxid.setText(mTicket.getTxid());
         tvTicketDateTimePurchase.setText(mTicket.getTxdatetime());
+        if (mTicket.getRefunded() == 1) {
+            tvTicketCancelled.setText("This class has been cancelled and your ticket has been refunded, apologies for any inconvenience caused.");
+        }
 
     }
 }

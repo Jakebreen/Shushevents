@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,9 +113,9 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
 
     @Override
     public void cancelEvent(int eventid) {
-        mAPIService.cancelEvent(eventid).enqueue(new Callback<String>() {
+        mAPIService.cancelEvent(eventid).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<String>  call, Response<String>  response) {
+            public void onResponse(Call<ResponseBody>  call, Response<ResponseBody>  response) {
                 if(response.isSuccessful()) {
                     showResponse(response.body().toString());
                     mView.showToast("Event cancelled and refunded");
@@ -123,7 +124,7 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
             }
 
             @Override
-            public void onFailure(Call<String>  call, Throwable t) {
+            public void onFailure(Call<ResponseBody>  call, Throwable t) {
                 mView.showToast("Problem cancelling event");
                 showResponse(t.toString());
                 Log.e(TAG, "Unable to submit Cancel request to API.");
