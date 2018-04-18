@@ -3,6 +3,8 @@ package uk.co.jakebreen.shushevents.view.impl;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -32,6 +34,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,6 +50,7 @@ import butterknife.OnTouch;
 import uk.co.jakebreen.shushevents.R;
 import uk.co.jakebreen.shushevents.data.model.Instructor;
 import uk.co.jakebreen.shushevents.data.model.Venue;
+import uk.co.jakebreen.shushevents.data.remote.APIService;
 import uk.co.jakebreen.shushevents.injection.AppComponent;
 import uk.co.jakebreen.shushevents.injection.CreateEventViewModule;
 import uk.co.jakebreen.shushevents.injection.DaggerCreateEventViewComponent;
@@ -97,6 +102,9 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     private Venue mVenue;
     private Instructor mInstructor;
 
+    private APIService mImageAPIService;
+    private Uri resultUri;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -127,6 +135,7 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         etCreateVenueTown = (EditText) dialog.findViewById(R.id.et_createVenueTown);
         etCreateVenuePostcode = (EditText) dialog.findViewById(R.id.et_createVenuePostcode);
         spnVenue = (Spinner) dialog.findViewById(R.id.spn_venueList);
+
     }
 
     @Override
@@ -173,9 +182,9 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
 
         mInstructor = (Instructor) spnCreateEventInstructor.getSelectedItem();
 
-        if (mPresenter.validateForm(title, description, instructor, date, time, ticketPrice, ticketMax, mVenue, duration)) {
+        if (mPresenter.validateForm(title, description, instructor, date, time, ticketPrice, ticketMax, mVenue, duration, resultUri)) {
             iTicketMax = Integer.parseInt(ticketMax);
-            mPresenter.sendEvent(userid, title, description, mInstructor.getUserid(), date, time, ticketPrice, iTicketMax, mVenue.getVenueId(), duration, repeatWeeks);
+            mPresenter.sendEvent(userid, title, description, mInstructor.getUserid(), date, time, ticketPrice, iTicketMax, mVenue.getVenueId(), duration, repeatWeeks, resultUri);
         }
     }
 
@@ -385,5 +394,27 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
             }
         };
         spnCreateEventInstructor.setAdapter(adapter);
+    }
+
+    @OnClick(R.id.iv_createEventImageHolder)
+    public void onClickGetImage() {
+        CropImage.activity()
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMinCropResultSize(330,60)
+                .setMaxCropResultSize(330,60)
+                .start(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                resultUri = result.getUri();
+                iv_createEventImageHolder.setImageURI(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
     }
 }

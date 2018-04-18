@@ -43,7 +43,7 @@
                         android:background="@drawable/et_admin_create_event"
                         android:ems="12"
                         android:hint="@string/et_createEventTitle"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp" />
 
@@ -65,12 +65,12 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="100dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -82,7 +82,7 @@
                         android:background="@drawable/et_admin_create_event"
                         android:ems="12"
                         android:hint="@string/et_createEventDescription"
-                        android:inputType="text"
+                        android:inputType="text|textMultiLine|textCapSentences"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
                         android:maxLength="250"/>
@@ -106,7 +106,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

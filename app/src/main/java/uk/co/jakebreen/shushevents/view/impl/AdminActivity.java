@@ -41,6 +41,7 @@ public final class AdminActivity extends BaseActivity<AdminPresenter, AdminView>
 
         // Your code here
         // Do not call mPresenter from here, it will be null! Wait for onStart or onPostCreate.
+
     }
 
     @Override

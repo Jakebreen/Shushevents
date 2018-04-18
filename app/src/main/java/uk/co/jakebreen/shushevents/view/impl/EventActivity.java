@@ -76,6 +76,7 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
         setContentView(R.layout.activity_event);
         // Your code here
         // Do not call mPresenter from here, it will be null! Wait for onStart or onPostCreate.
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package uk.co.jakebreen.shushevents.presenter;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -11,14 +12,15 @@ public interface CreateEventPresenter extends BasePresenter<CreateEventView> {
 
     boolean validateForm(String title, String description, String instructor, String date,
                          String time, String ticketPrice, String ticketMax, Venue venue,
-                         String duration);
+                         String duration, Uri uri);
     void sendEvent(String userid, String title, String description, String instructorId, String date,
                    String time, String ticketPrice, int ticketMax, int venueId,
-                   String duration, String repeatWeeks);
+                   String duration, String repeatWeeks, Uri uri);
     boolean validateForm(String handle, String address, String town, String postcode, Double lat, Double lng);
     void sendVenue(String handle, String address, String town, String postcode, Double lat, Double lng);
     void getVenues();
     void getInstructors();
     LatLng getLocation(String postcode, Context context);
     String onDateSetFormatDate(int startYear, int startMonth, int startDay);
+    void sendCoverImage(Uri uri);
 }

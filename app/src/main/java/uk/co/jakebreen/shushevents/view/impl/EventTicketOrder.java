@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -132,6 +133,18 @@ public final class EventTicketOrder extends BaseActivity<EventTicketOrderPresent
         ArrayAdapter ticketAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item, ticketOrderNum);
         spnTicketOrderNumberPurchased.setAdapter(ticketAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -113,10 +113,10 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
         ButterKnife.bind(this);
 
         // toolbar back button
-        //if (getSupportActionBar() != null) {
-        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //    getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //}
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     @Override
@@ -178,6 +178,10 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V> extends AppCom
         Intent intent;
 
         switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+                finish();
+                return true;
             case R.id.item_login:
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);

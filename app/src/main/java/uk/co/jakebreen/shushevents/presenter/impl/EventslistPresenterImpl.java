@@ -97,7 +97,7 @@ public final class EventslistPresenterImpl extends BasePresenterImpl<EventslistV
                     showResponse(response.body().toString());
 
                     List<Event> eventList = response.body();
-                    mView.displayEventList(eventList);
+                    if (mView != null) mView.displayEventList(eventList);
 
                     Log.i(TAG, "Event request submitted to API." + response.body().toString());
                 }

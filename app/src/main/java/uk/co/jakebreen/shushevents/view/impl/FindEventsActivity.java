@@ -72,6 +72,12 @@ public final class FindEventsActivity extends BaseActivity<FindEventsPresenter, 
             Intent intent = new Intent(this, EventslistActivity.class);
             startActivity(intent);
         }
+
+        // toolbar back button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
     }
 
     @OnClick(R.id.btn_findClasses)

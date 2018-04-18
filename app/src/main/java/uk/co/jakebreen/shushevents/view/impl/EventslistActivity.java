@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,6 +91,12 @@ public final class EventslistActivity extends BaseActivity<EventslistPresenter, 
         } else {
             finish();
         }
+
+        // toolbar back button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
     }
 
     @Override
@@ -142,6 +151,10 @@ public final class EventslistActivity extends BaseActivity<EventslistPresenter, 
             TextView tvEventTicketPrice = (TextView) convertView.findViewById(R.id.tv_eventTicketPrice);
             TextView tvEventTicketRemaining = (TextView) convertView.findViewById(R.id.tv_eventTicketRemaining);
             TextView tvEventDistanceMiles = (TextView) convertView.findViewById(R.id.tv_eventDistanceMiles);
+            ImageView ivEventImage = (ImageView) convertView.findViewById(R.id.iv_eventImage);
+
+            Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + event.getCoverImage()).fit().into(ivEventImage);
+
 
             String formattedDistance = String.format("%.02f", event.getDistance());
 

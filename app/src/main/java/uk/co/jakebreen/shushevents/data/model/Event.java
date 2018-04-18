@@ -62,6 +62,9 @@ public class Event implements Serializable {
     @SerializedName("visible")
     @Expose
     private int visible;
+    @SerializedName("coverImage")
+    @Expose
+    private String coverImage;
 
     public int getIdevent() {
         return idevent;
@@ -199,6 +202,14 @@ public class Event implements Serializable {
         this.visible = visible;
     }
 
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -219,6 +230,7 @@ public class Event implements Serializable {
                 ", instructorSurname='" + instructorSurname + '\'' +
                 ", venueHandle='" + venueHandle + '\'' +
                 ", visible=" + visible +
+                ", coverImage='" + coverImage + '\'' +
                 '}';
     }
 }

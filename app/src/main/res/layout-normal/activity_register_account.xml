@@ -118,7 +118,7 @@
                     android:background="@drawable/et_white"
                     android:ems="12"
                     android:hint="@string/et_registerFirstname"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:paddingBottom="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp" />
@@ -141,7 +141,7 @@
                     android:background="@drawable/et_white"
                     android:ems="12"
                     android:hint="@string/et_registerSurname"
-                    android:inputType="text"
+                    android:inputType="textCapSentences"
                     android:paddingBottom="10dp"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp" />

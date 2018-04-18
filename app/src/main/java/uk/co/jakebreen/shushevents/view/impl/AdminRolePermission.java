@@ -59,6 +59,7 @@ public final class AdminRolePermission extends BaseActivity<AdminRolePermissionP
 
         // Your code here
         // Do not call mPresenter from here, it will be null! Wait for onStart or onPostCreate.
+
     }
 
     @Override

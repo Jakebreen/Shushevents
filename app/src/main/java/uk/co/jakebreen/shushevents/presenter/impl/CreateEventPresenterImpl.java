@@ -3,11 +3,13 @@ package uk.co.jakebreen.shushevents.presenter.impl;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -17,9 +19,16 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 import uk.co.jakebreen.shushevents.data.model.Event;
 import uk.co.jakebreen.shushevents.data.model.Instructor;
 import uk.co.jakebreen.shushevents.data.model.Venue;
@@ -77,7 +86,7 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
     @Override
     public boolean validateForm(String title, String description, String instructor, String date,
                                 String time, String ticketPrice, String ticketMax, Venue venue,
-                                String duration) {
+                                String duration, Uri uri) {
 
         if (title.equals(null) || title.equals("")) {
             mView.showToast("Title field empty");
@@ -106,6 +115,9 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
         } else if (duration.equals(null) || duration.equals("")) {
             mView.showToast("Duration field empty");
             return false;
+        } else if (uri == null || uri.equals("")) {
+            mView.showToast("No cover image selected");
+            return false;
         } else {
             return true;
         }
@@ -114,9 +126,16 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
     @Override
     public void sendEvent(String userid, String title, String description, String instructor,
                           String date, String time, String ticketPrice, int ticketMax, int venueId,
-                          String duration, String repeatWeeks) {
+                          String duration, String repeatWeeks, Uri uri) {
+
+        File file = new File(uri.getPath());
+        file.getAbsolutePath();
+        String fileName = file.getName();
+
+        sendCoverImage(uri);
+
         mAPIService.saveEvent(userid, title, description, instructor, date, time, ticketPrice,
-                duration, ticketMax, venueId, repeatWeeks).enqueue(new Callback<Event>() {
+                duration, ticketMax, venueId, repeatWeeks, fileName).enqueue(new Callback<Event>() {
             @Override
             public void onResponse(Call<Event> call, Response<Event> response) {
                 if(response.isSuccessful()) {
@@ -273,5 +292,34 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
             String StringDateformat_UK = dateformat_UK.format(SelectedDate);
             return StringDateformat_UK;
         }
+    }
+
+    //Upload cover image to server
+    @Override
+    public void sendCoverImage(Uri uri) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        APIService apiService = new Retrofit.Builder().baseUrl("http://jakebreen.co.uk/").client(client).build().create(APIService.class);
+
+        File file = new File(uri.getPath());
+        file.getAbsolutePath();
+
+        RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload_test");
+
+        retrofit2.Call<okhttp3.ResponseBody> req = apiService.postImage(body, name);
+        req.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // Do Something
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }
