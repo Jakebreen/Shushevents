@@ -21,11 +21,10 @@ Not yet available on playstore
 
 
 # Design
-* MVP architecture pattern.
+* Adheres to the MVP architecture pattern.
 * Cloud SQL datastore.
-* Firebase Authentication and Crashlytics
+* Firebase Authentication, Messaging and Crashlytics
 * Braintree payments processor
 * Retrofit2
-* Dagger2
 * RESTful API
 
