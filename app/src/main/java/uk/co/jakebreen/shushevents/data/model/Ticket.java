@@ -54,6 +54,18 @@ public class Ticket implements Serializable {
     @SerializedName("refunded")
     @Expose
     private int refunded;
+    @SerializedName("coverImage")
+    @Expose
+    private String coverImage;
+    @SerializedName("lat")
+    @Expose
+    private Double lat;
+    @SerializedName("lng")
+    @Expose
+    private Double lng;
+    @SerializedName("handle")
+    @Expose
+    private String handle;
 
     public int getIdticket() {
         return idticket;
@@ -167,6 +179,39 @@ public class Ticket implements Serializable {
         this.refunded = refunded;
     }
 
+    public String getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -184,6 +229,10 @@ public class Ticket implements Serializable {
                 ", firstname='" + firstname + '\'' +
                 ", surname='" + surname + '\'' +
                 ", refunded=" + refunded +
+                ", coverImage='" + coverImage + '\'' +
+                ", lat=" + lat +
+                ", lng=" + lng +
+                ", handle='" + handle + '\'' +
                 '}';
     }
 }

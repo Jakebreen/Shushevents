@@ -22,6 +22,22 @@
         android:theme="@style/AppTheme">
 
         <!-- Crashlytics enabled or disabled -->
+
+        <service
+            android:name=".data.firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".data.firebase.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <!-- Crashlytics enabled or disabled -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="true" />
@@ -85,7 +101,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.impl.CreateEventActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".view.impl.AdminActivity"
             android:screenOrientation="portrait" />

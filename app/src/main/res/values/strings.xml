@@ -148,4 +148,9 @@
     <string name="tv_cancelEventSearch">Search for classes</string>
     <string name="tv_cancelEventSelect">Select event to cancel</string>
 
+    <!--DialogCoverImagePicker-->
+    <string name="btn_coverImageSelect">SELECT</string>
+    <string name="btn_coverImageUpload">UPLOAD</string>
+    <string name="btn_coverImageCancel">CANCEL</string>
+
 </resources>

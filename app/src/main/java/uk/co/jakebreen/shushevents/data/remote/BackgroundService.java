@@ -31,6 +31,7 @@ import static uk.co.jakebreen.shushevents.view.impl.BaseActivity.mAuth;
  */
 
 public class BackgroundService extends IntentService {
+    //Make synchronous REST calls and return result
 
     private String TAG = BackgroundService.class.getSimpleName();
     private APIService mAPIService;

@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import uk.co.jakebreen.shushevents.R;
+import uk.co.jakebreen.shushevents.data.firebase.MyFirebaseInstanceIDService;
 import uk.co.jakebreen.shushevents.data.model.Account;
 import uk.co.jakebreen.shushevents.data.remote.BackgroundService;
 import uk.co.jakebreen.shushevents.injection.AppComponent;
@@ -62,6 +63,8 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     TextView tvLoginRegister;
     @BindView(R.id.login_button)
     LoginButton btn_FacebookLogin;
+    @BindView(R.id.tv_loginReset)
+    TextView tvLoginReset;
 
     protected FirebaseUser user;
     private ResponseReceiver receiver;
@@ -196,7 +199,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
     }
 
     public void getCurrentAccount() {
-        showDialog("One moment.. verifying user details");
+        showDialog("One moment..");
         Intent intent = new Intent(this, BackgroundService.class);
         intent.putExtra("switchValue", "account");
         startService(intent);
@@ -211,7 +214,7 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
             Bundle bundle = intent.getExtras();
             ArrayList<Parcelable> currentAccount = bundle.getParcelableArrayList("currentAccount");
 
-            //Catch non-synced accounts?
+            //Catch non-synced accounts here?
             if (currentAccount == null) {
                 hideDialog();
                 showToast("Account does not exist");
@@ -227,11 +230,16 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
             setDefaults("userSurname", account.getSurname());
             setDefaults("userEmail", account.getEmail());
             setDefaults("userRoleID", account.getRoleid());
+            setDefaults("firebaseToken", account.getFirebaseToken());
 
             Log.i(TAG, "User account: " + account.getEmail());
 
+            new MyFirebaseInstanceIDService(account.getFirebaseToken());
+
             unregisterReceiver(receiver);
             hideDialog();
+
+
             finishActivity();
         }
     }
@@ -259,5 +267,11 @@ public final class LoginActivity extends BaseActivity<LoginPresenter, LoginView>
 
                     }
                 });
+    }
+
+    @OnClick(R.id.tv_loginReset)
+    public void onClickResetPassword() {
+        Intent intent = new Intent(this, ResetPassword.class);
+        startActivity(intent);
     }
 }

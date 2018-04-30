@@ -1,8 +1,9 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="text_large">40dp</dimen>
-    <dimen name="text_medium">24dp</dimen>
-    <dimen name="text_small">18dp</dimen>
+    <dimen name="text_large">40sp</dimen>
+    <dimen name="text_medium_large">32sp</dimen>
+    <dimen name="text_medium">24sp</dimen>
+    <dimen name="text_small">18sp</dimen>
 
 </resources>

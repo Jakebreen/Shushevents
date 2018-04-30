@@ -9,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -111,6 +113,7 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
             TextView tvEventTicketPrice = (TextView) convertView.findViewById(R.id.tv_eventTicketPrice);
             TextView tvEventPersonsPaid = (TextView) convertView.findViewById(R.id.tv_eventPersonsPaid);
             TextView tvEventTicketCancelled = (TextView) convertView.findViewById(R.id.tv_eventTicketCancelled);
+            ImageView ivEventImage = (ImageView) convertView.findViewById(R.id.iv_eventImage);
 
             // Populate the data into the template view using the data object
             tvEventTitle.setText(ticket.getTitle());
@@ -119,8 +122,10 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
             tvEventTicketPrice.setText(ticket.getEntryFee());
             tvEventPersonsPaid.setText(String.valueOf(ticket.getEntrants()));
 
+            Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + ticket.getCoverImage()).fit().into(ivEventImage);
+
             if (ticket.getRefunded() == 1) {
-                tvEventTicketCancelled.setText("This class has been cancelled and your ticket has been refunded, apologies for any inconvenience caused.");
+                tvEventTicketCancelled.setText("This class has been cancelled and your ticket has been refunded.");
             }
 
             // Return the completed view to render on screen

@@ -3,6 +3,7 @@ package uk.co.jakebreen.shushevents.view.impl;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,15 +11,18 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -34,10 +38,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +65,9 @@ import uk.co.jakebreen.shushevents.presenter.loader.PresenterFactory;
 import uk.co.jakebreen.shushevents.view.CreateEventView;
 
 public final class CreateEventActivity extends BaseActivity<CreateEventPresenter, CreateEventView> implements CreateEventView, DatePickerDialog.OnDateSetListener, OnMapReadyCallback {
+
+    private String TAG = CreateEventActivity.class.getSimpleName();
+
     @Inject
     PresenterFactory<CreateEventPresenter> mPresenterFactory;
 
@@ -94,13 +103,15 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     protected FirebaseUser user;
     private int iTicketMax, iVenue;
     private DatePickerDialog datePickerDialog;
-    private Dialog dialog;
+    private Dialog venueDialog, coverImageDialog;
     private GoogleMap mMap;
     private Double lat, lng;
     private EditText etCreateVenueTitle, etCreateVenueAddress, etCreateVenueTown, etCreateVenuePostcode;
     private Spinner spnVenue;
     private Venue mVenue;
     private Instructor mInstructor;
+    private ListView lvCoverImageList;
+    private String selectedCoverImage;
 
     private APIService mImageAPIService;
     private Uri resultUri;
@@ -127,14 +138,18 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         datePickerDialog = new DatePickerDialog(
                 this, this, startYear, startMonth, startDay);
 
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_venue_picker);
+        venueDialog = new Dialog(this);
+        venueDialog.setContentView(R.layout.dialog_venue_picker);
+        coverImageDialog = new Dialog(this);
+        coverImageDialog.setContentView(R.layout.dialog_coverimage_picker);
 
-        etCreateVenueTitle = (EditText) dialog.findViewById(R.id.et_createVenueTitle);
-        etCreateVenueAddress = (EditText) dialog.findViewById(R.id.et_createVenueAddress);
-        etCreateVenueTown = (EditText) dialog.findViewById(R.id.et_createVenueTown);
-        etCreateVenuePostcode = (EditText) dialog.findViewById(R.id.et_createVenuePostcode);
-        spnVenue = (Spinner) dialog.findViewById(R.id.spn_venueList);
+        lvCoverImageList = (ListView) coverImageDialog.findViewById(R.id.lv_coverImageList);
+
+        etCreateVenueTitle = (EditText) venueDialog.findViewById(R.id.et_createVenueTitle);
+        etCreateVenueAddress = (EditText) venueDialog.findViewById(R.id.et_createVenueAddress);
+        etCreateVenueTown = (EditText) venueDialog.findViewById(R.id.et_createVenueTown);
+        etCreateVenuePostcode = (EditText) venueDialog.findViewById(R.id.et_createVenuePostcode);
+        spnVenue = (Spinner) venueDialog.findViewById(R.id.spn_venueList);
 
     }
 
@@ -182,9 +197,11 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
 
         mInstructor = (Instructor) spnCreateEventInstructor.getSelectedItem();
 
-        if (mPresenter.validateForm(title, description, instructor, date, time, ticketPrice, ticketMax, mVenue, duration, resultUri)) {
+        Log.i(TAG, "selectedCoverImage: " + selectedCoverImage + " resultUri: " + resultUri);
+
+        if (mPresenter.validateForm(title, description, instructor, date, time, ticketPrice, ticketMax, mVenue, duration, resultUri, selectedCoverImage)) {
             iTicketMax = Integer.parseInt(ticketMax);
-            mPresenter.sendEvent(userid, title, description, mInstructor.getUserid(), date, time, ticketPrice, iTicketMax, mVenue.getVenueId(), duration, repeatWeeks, resultUri);
+            mPresenter.sendEvent(userid, title, description, mInstructor.getUserid(), date, time, ticketPrice, iTicketMax, mVenue.getVenueId(), duration, repeatWeeks, resultUri, selectedCoverImage);
         }
     }
 
@@ -240,7 +257,7 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     @OnTouch(R.id.et_createEventVenue)
     public boolean onTouchVenueDialog(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            dialog.setCancelable(false);
+            venueDialog.setCancelable(false);
 
             mPresenter.getVenues();
 
@@ -248,10 +265,10 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
 
-            Button btnSelectVenue = (Button) dialog.findViewById(R.id.btn_selectVenue);
-            Button btnClose = (Button) dialog.findViewById(R.id.btn_close);
-            Button btnCreateVenue = (Button) dialog.findViewById(R.id.btn_create);
-            final EditText etPostcode = (EditText) dialog.findViewById(R.id.et_createVenuePostcode);
+            Button btnSelectVenue = (Button) venueDialog.findViewById(R.id.btn_selectVenue);
+            Button btnClose = (Button) venueDialog.findViewById(R.id.btn_close);
+            Button btnCreateVenue = (Button) venueDialog.findViewById(R.id.btn_create);
+            final EditText etPostcode = (EditText) venueDialog.findViewById(R.id.et_createVenuePostcode);
 
             etPostcode.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -301,9 +318,39 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
                 }
             });
 
-            dialog.show();
+            venueDialog.show();
         }
         return false;
+    }
+
+    @OnClick(R.id.iv_createEventImageHolder)
+    public void onClickGetImage() {
+
+        mPresenter.getCoverImages();
+
+        //Button btnSelectImage = (Button) coverImageDialog.findViewById(R.id.btn_coverImageSelect);
+        Button btnUploadImage = (Button) coverImageDialog.findViewById(R.id.btn_coverImageUpload);
+        Button btnClose = (Button) coverImageDialog.findViewById(R.id.btn_coverImageCancel);
+
+
+
+        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeDialog();
+                cropImageTask();
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeDialog();
+            }
+        });
+
+        coverImageDialog.show();
+
     }
 
     @Override
@@ -360,7 +407,8 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         etCreateVenuePostcode.setText("");
         lat = null;
         lng = null;
-        dialog.dismiss();
+        venueDialog.dismiss();
+        coverImageDialog.dismiss();
     }
 
     @Override
@@ -396,12 +444,14 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         spnCreateEventInstructor.setAdapter(adapter);
     }
 
-    @OnClick(R.id.iv_createEventImageHolder)
-    public void onClickGetImage() {
+    @Override
+    public void cropImageTask() {
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .setMinCropResultSize(330,60)
-                .setMaxCropResultSize(330,60)
+                .setAspectRatio(4,1)
+                .setRequestedSize(660,165, CropImageView.RequestSizeOptions.RESIZE_EXACT)
+                //.setMinCropResultSize(330,60)
+                //.setMaxCropResultSize(330,60)
                 .start(this);
     }
 
@@ -410,11 +460,56 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
+                selectedCoverImage = null;
                 resultUri = result.getUri();
                 iv_createEventImageHolder.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
+        }
+    }
+
+    @Override
+    public void displayCoverImageList(ArrayList<String> coverImageList) {
+        // Construct the data source
+        ArrayList<String> arrayListCoverImage = new ArrayList<String>(coverImageList);
+        // Create the adapter to convert the array to views
+        CoverImageAdapter adapter = new CoverImageAdapter(this, arrayListCoverImage);
+        // Attach the adapter to a ListView
+        lvCoverImageList.setAdapter(adapter);
+    }
+
+    public class CoverImageAdapter extends ArrayAdapter<String> {
+
+        public CoverImageAdapter(Context context, ArrayList<String> arrayListCoverImage) {
+            super(context, 0, arrayListCoverImage);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            String coverImage = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_coverimage_list, parent, false);
+            }
+
+            // Lookup view for data population
+            ImageView ivCoverImage = (ImageView) convertView.findViewById(R.id.iv_coverImage);
+
+            Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + coverImage).fit().into(ivCoverImage);
+
+            lvCoverImageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+                                        long arg3) {
+                    resultUri = null;
+                    selectedCoverImage = (lvCoverImageList.getItemAtPosition(position).toString());
+                    Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + selectedCoverImage).fit().into(iv_createEventImageHolder);
+                    closeDialog();
+                }
+            });
+            return convertView;
         }
     }
 }

@@ -54,26 +54,27 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
     TextView tvEventPageTicketFee;
     @BindView(R.id.tv_eventPageDate)
     TextView tvEventPageDate;
-    @BindView(R.id.tv_eventPageTime)
-    TextView tvEventPageTime;
+    //@BindView(R.id.tv_eventPageTime)
+    //TextView tvEventPageTime;
     @BindView(R.id.tv_eventPageAddress)
     TextView tvEventPageAddress;
-    @BindView(R.id.tv_eventPageTown)
-    TextView tvEventPageTown;
-    @BindView(R.id.tv_eventPagePostcode)
-    TextView tvEventPagePostcode;
+    //@BindView(R.id.tv_eventPageTown)
+    //TextView tvEventPageTown;
+    //@BindView(R.id.tv_eventPagePostcode)
+    //TextView tvEventPagePostcode;
     @BindView(R.id.tv_eventPageDescription)
     TextView tvEventPageDescription;
 
     private Event mEvent;
     private Venue mVenue;
+    private Account mAccount;
     private GoogleMap mMap;
     private LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.constraint_activity);
         // Your code here
         // Do not call mPresenter from here, it will be null! Wait for onStart or onPostCreate.
 
@@ -106,6 +107,9 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
 
         Intent intent = getIntent();
         mEvent = (Event) intent.getSerializableExtra("event");
+        mAccount = (Account) intent.getSerializableExtra("account");
+        mVenue = (Venue) intent.getSerializableExtra("venue");
+
         populateData();
     }
 
@@ -129,10 +133,10 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
     @Override
     public void populateData() {
         tvEventPageTitle.setText(mEvent.getTitle());
-        tvEventPageTicketFee.setText(mEvent.getEntryFee());
+        tvEventPageTicketFee.setText("£" + mEvent.getEntryFee() + " per person");
         tvEventPageDuration.setText(mEvent.getDuration());
-        tvEventPageDate .setText(mEvent.getDate());
-        tvEventPageTime.setText(mEvent.getTime());
+        tvEventPageDate.setText(mEvent.getDate() + " - " + mEvent.getTime());
+        //tvEventPageTime.setText(mEvent.getTime());
         tvEventPageDescription.setText(mEvent.getDescription());
 
         mPresenter.getInstructor(mEvent.getInstructorId());
@@ -141,16 +145,16 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
 
     @Override
     public void populateInstructorData(Account instructor) {
-        tvEventPageInstructor.setText(instructor.getFirstname() + " " + instructor.getSurname());
+        tvEventPageInstructor.setText("Yoga with " + instructor.getFirstname() + " " + instructor.getSurname());
     }
 
     @Override
     public void populateVenueData(Venue venue) {
         mVenue = venue;
 
-        tvEventPageAddress.setText(venue.getAddress());
-        tvEventPageTown.setText(venue.getTown());
-        tvEventPagePostcode.setText(venue.getPostcode());
+        tvEventPageAddress.setText(venue.getAddress() + " - " + venue.getTown() + ", " +venue.getPostcode());
+        //tvEventPageTown.setText(venue.getTown());
+        //tvEventPagePostcode.setText(venue.getPostcode());
 
         latLng = new LatLng(venue.getLat(), venue.getLng());
 
@@ -161,6 +165,8 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        mMap.getUiSettings().setAllGesturesEnabled(false);
 
         if (checkAvailability()) btnJoinClass.setEnabled(true);
     }

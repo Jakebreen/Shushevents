@@ -153,8 +153,11 @@ public final class EventslistActivity extends BaseActivity<EventslistPresenter, 
             TextView tvEventDistanceMiles = (TextView) convertView.findViewById(R.id.tv_eventDistanceMiles);
             ImageView ivEventImage = (ImageView) convertView.findViewById(R.id.iv_eventImage);
 
-            Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + event.getCoverImage()).fit().into(ivEventImage);
-
+            if (event.getCoverImage() != null){
+                Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + event.getCoverImage()).fit().into(ivEventImage);
+            } else {
+                //set default image here
+            }
 
             String formattedDistance = String.format("%.02f", event.getDistance());
 

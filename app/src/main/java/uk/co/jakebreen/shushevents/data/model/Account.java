@@ -6,11 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Jake on 02/03/2018.
  */
 
-public class Account implements Parcelable {
+public class Account implements Parcelable, Serializable {
 
     @SerializedName("userid")
     @Expose
@@ -27,6 +29,9 @@ public class Account implements Parcelable {
     @SerializedName("roleid")
     @Expose
     private int roleid;
+    @SerializedName("firebaseToken")
+    @Expose
+    private String firebaseToken;
 
     public String getUserid() {
         return userid;
@@ -68,6 +73,14 @@ public class Account implements Parcelable {
         this.roleid = roleid;
     }
 
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
+
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -76,6 +89,7 @@ public class Account implements Parcelable {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", roleid=" + roleid +
+                ", firebaseToken='" + firebaseToken + '\'' +
                 '}';
     }
 
@@ -85,6 +99,7 @@ public class Account implements Parcelable {
         surname = in.readString();
         email = in.readString();
         roleid = in.readInt();
+        firebaseToken = in.readString();
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {
@@ -111,5 +126,6 @@ public class Account implements Parcelable {
         parcel.writeString(surname);
         parcel.writeString(email);
         parcel.writeInt(roleid);
+        parcel.writeString(firebaseToken);
     }
 }

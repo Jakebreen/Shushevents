@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -208,11 +210,32 @@ public final class CancelEventActivity extends BaseActivity<CancelEventPresenter
                     } else {
                         builder = new AlertDialog.Builder(CancelEventActivity.this);
                     }
+
+                    //Create edit text field in dialog, set default refund message
+                    final EditText input = new EditText(CancelEventActivity.this);
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    input.setLayoutParams(lp);
+                    input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(200)});
+                    input.setText("Your class has been cancelled and your ticket has been refunded.");
+                    builder.setView(input);
+
                     builder.setTitle("Cancel and refund")
                             .setMessage("Are you sure you want to cancel this class and refund all attendees?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mPresenter.cancelEvent(selectedEvent.getIdevent());
+
+                                    if (input.getText().toString().equals("") || input.getText().toString() == null) {
+                                        showToast("No cancellation message provided.");
+                                    } else {
+                                        //Set notification title
+                                        String shortDate = selectedEvent.getDate().substring(0, selectedEvent.getDate().length() - 5);
+                                        //Declare title before calling MyFirebaseMessagingService().sendNotificationToID().
+                                        String title = "Your class on " + shortDate + " at " + selectedEvent.getTime() + " has been cancelled.";
+                                        mPresenter.cancelEvent(selectedEvent.getIdevent(), title, input.getText().toString());
+                                    }
+
                                 }
                             })
                             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

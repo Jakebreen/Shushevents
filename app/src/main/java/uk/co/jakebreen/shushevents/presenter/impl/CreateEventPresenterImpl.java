@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +38,10 @@ import uk.co.jakebreen.shushevents.data.remote.ApiUtils;
 import uk.co.jakebreen.shushevents.interactor.CreateEventInteractor;
 import uk.co.jakebreen.shushevents.presenter.CreateEventPresenter;
 import uk.co.jakebreen.shushevents.view.CreateEventView;
-import uk.co.jakebreen.shushevents.view.impl.CreateEventActivity;
 
 public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEventView> implements CreateEventPresenter {
 
-    private String TAG = CreateEventActivity.class.getSimpleName();
+    private String TAG = CreateEventPresenterImpl.class.getSimpleName();
 
     /**
      * The interactor
@@ -86,7 +86,7 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
     @Override
     public boolean validateForm(String title, String description, String instructor, String date,
                                 String time, String ticketPrice, String ticketMax, Venue venue,
-                                String duration, Uri uri) {
+                                String duration, Uri uri, String selectedCoverImage) {
 
         if (title.equals(null) || title.equals("")) {
             mView.showToast("Title field empty");
@@ -115,7 +115,7 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
         } else if (duration.equals(null) || duration.equals("")) {
             mView.showToast("Duration field empty");
             return false;
-        } else if (uri == null || uri.equals("")) {
+        } else if ((uri == null || uri.equals("")) && (selectedCoverImage.equals(null) || selectedCoverImage.equals(""))) {
             mView.showToast("No cover image selected");
             return false;
         } else {
@@ -126,13 +126,18 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
     @Override
     public void sendEvent(String userid, String title, String description, String instructor,
                           String date, String time, String ticketPrice, int ticketMax, int venueId,
-                          String duration, String repeatWeeks, Uri uri) {
+                          String duration, String repeatWeeks, Uri uri, String selectedCoverImage) {
 
-        File file = new File(uri.getPath());
-        file.getAbsolutePath();
-        String fileName = file.getName();
+        String fileName;
 
-        sendCoverImage(uri);
+        if (uri == null || uri.equals("")) {
+            fileName = selectedCoverImage;
+        } else {
+            File file = new File(uri.getPath());
+            file.getAbsolutePath();
+            fileName = file.getName();
+            sendCoverImage(uri);
+        }
 
         mAPIService.saveEvent(userid, title, description, instructor, date, time, ticketPrice,
                 duration, ticketMax, venueId, repeatWeeks, fileName).enqueue(new Callback<Event>() {
@@ -319,6 +324,34 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void getCoverImages() {
+        mAPIService.getCoverImages().enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+                if(response.isSuccessful()) {
+                    showResponse(response.body().toString());
+
+                    ArrayList<String> coverImageList = response.body();
+
+                    if (mView == null) {
+                        Log.i(TAG, "mView is null." + response.body().toString());
+                    } else {
+                        mView.displayCoverImageList(coverImageList);
+                    }
+                    Log.i(TAG, "Image request submitted to API." + response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+                mView.showToast("Unable to find imges");
+                showResponse(t.toString());
+                Log.e(TAG, "Unable to submit image request to API.");
             }
         });
     }

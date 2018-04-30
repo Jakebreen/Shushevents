@@ -1,5 +1,6 @@
 package uk.co.jakebreen.shushevents.data.remote;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -116,4 +117,22 @@ public interface APIService {
     //@POST("android/shushevents/classimages/handleImage.php")
     @POST("android/shushevents/handleImage.php")
     Call<ResponseBody> postImage(@Part MultipartBody.Part image, @Part("upload") RequestBody name);
+
+    @GET("android/shushevents/readImageDirectory.php")
+    Call<ArrayList<String>> getCoverImages();
+
+    @POST("android/shushevents/update/updateAccountFirebaseToken.php")
+    @FormUrlEncoded
+    Call<ResponseBody> updateAccountFirebaseToken(@Field("fbToken") String fbToken,
+                                                  @Field("userid") String userid);
+
+    @POST("android/shushevents/firebase/selectEventAttendees.php")
+    @FormUrlEncoded
+    Call<ArrayList<String>> getEventAttendees(@Field("eventid") int eventid);
+
+    @POST("android/shushevents/firebase/sendNotification.php")
+    @FormUrlEncoded
+    Call<ResponseBody> sendNotification(@Field("idarray") String idarray,
+                                        @Field("title") String title,
+                                        @Field("message") String message);
 }

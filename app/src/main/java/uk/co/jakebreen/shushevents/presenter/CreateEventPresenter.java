@@ -12,10 +12,10 @@ public interface CreateEventPresenter extends BasePresenter<CreateEventView> {
 
     boolean validateForm(String title, String description, String instructor, String date,
                          String time, String ticketPrice, String ticketMax, Venue venue,
-                         String duration, Uri uri);
+                         String duration, Uri uri, String selectedCoverImage);
     void sendEvent(String userid, String title, String description, String instructorId, String date,
                    String time, String ticketPrice, int ticketMax, int venueId,
-                   String duration, String repeatWeeks, Uri uri);
+                   String duration, String repeatWeeks, Uri uri, String selectedCoverImage);
     boolean validateForm(String handle, String address, String town, String postcode, Double lat, Double lng);
     void sendVenue(String handle, String address, String town, String postcode, Double lat, Double lng);
     void getVenues();
@@ -23,4 +23,5 @@ public interface CreateEventPresenter extends BasePresenter<CreateEventView> {
     LatLng getLocation(String postcode, Context context);
     String onDateSetFormatDate(int startYear, int startMonth, int startDay);
     void sendCoverImage(Uri uri);
+    void getCoverImages();
 }

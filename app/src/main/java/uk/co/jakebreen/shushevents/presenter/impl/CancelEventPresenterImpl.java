@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import uk.co.jakebreen.shushevents.data.firebase.MyFirebaseMessagingService;
 import uk.co.jakebreen.shushevents.data.model.Event;
 import uk.co.jakebreen.shushevents.interactor.CancelEventInteractor;
 import uk.co.jakebreen.shushevents.presenter.CancelEventPresenter;
@@ -25,6 +27,8 @@ import static uk.co.jakebreen.shushevents.view.impl.BaseActivity.mAPIService;
 public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEventView> implements CancelEventPresenter {
 
     private String TAG = CancelEventPresenterImpl.class.getSimpleName();
+
+    private ArrayList<String> tokenList;
 
     /**
      * The interactor
@@ -93,8 +97,6 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
 
                     List<Event> eventList = response.body();
                     mView.displayEventList(eventList);
-
-                    Log.i(TAG, "Event request submitted to API." + response.body().toString());
                 }
             }
 
@@ -102,7 +104,6 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
             public void onFailure(Call<List<Event>> call, Throwable t) {
                 mView.showToast("No classes for this date found");
                 showResponse(t.toString());
-                Log.e(TAG, "Unable to submit event request to API.");
             }
         });
     }
@@ -112,14 +113,34 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
     }
 
     @Override
-    public void cancelEvent(int eventid) {
+    public void cancelEvent(final int eventid, final String title, final String message) {
+
+        //Call to update event and refund all attendees
         mAPIService.cancelEvent(eventid).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody>  call, Response<ResponseBody>  response) {
                 if(response.isSuccessful()) {
                     showResponse(response.body().toString());
-                    mView.showToast("Event cancelled and refunded");
-                    Log.i(TAG, "Cancel request submitted to API." + response.body().toString());
+
+                    //Call to get firebase tokens of attendees.
+                    mAPIService.getEventAttendees(eventid).enqueue(new Callback<ArrayList<String>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<String>>  call, Response<ArrayList<String>>  response) {
+                            if(response.isSuccessful()) {
+                                tokenList = response.body();
+                                String tokenString = tokenList.toString();
+                                //Send notification to all attendees
+                                new MyFirebaseMessagingService().sendNotificationToIDs(tokenString, title, message);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<String>>  call, Throwable t) {
+                            showResponse(t.toString());
+                        }
+                    });
+
+                    if (mView != null) mView.showToast("Event cancelled and refunded");
                 }
             }
 
@@ -127,7 +148,6 @@ public final class CancelEventPresenterImpl extends BasePresenterImpl<CancelEven
             public void onFailure(Call<ResponseBody>  call, Throwable t) {
                 mView.showToast("Problem cancelling event");
                 showResponse(t.toString());
-                Log.e(TAG, "Unable to submit Cancel request to API.");
             }
         });
     }

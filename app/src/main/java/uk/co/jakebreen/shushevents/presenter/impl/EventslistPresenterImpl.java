@@ -17,7 +17,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.jakebreen.shushevents.R;
+import uk.co.jakebreen.shushevents.data.model.Account;
 import uk.co.jakebreen.shushevents.data.model.Event;
+import uk.co.jakebreen.shushevents.data.model.Venue;
 import uk.co.jakebreen.shushevents.interactor.EventslistInteractor;
 import uk.co.jakebreen.shushevents.presenter.EventslistPresenter;
 import uk.co.jakebreen.shushevents.view.EventslistView;
@@ -38,6 +40,9 @@ public final class EventslistPresenterImpl extends BasePresenterImpl<EventslistV
 
     @BindView(R.id.lv_eventList)
     ListView lvEventList;
+
+    private Account account;
+    private Venue venue;
 
     @Inject
     public EventslistPresenterImpl(@NonNull EventslistInteractor interactor) {
@@ -114,5 +119,58 @@ public final class EventslistPresenterImpl extends BasePresenterImpl<EventslistV
 
     public void showResponse(String response) {
         Log.e(TAG, "Response: " + response);
+    }
+
+    @Override
+    public Account getInstructor(String userid) {
+        mAPIService.getAccountByUserID(userid).enqueue(new Callback<List<Account>>() {
+            @Override
+            public void onResponse(Call<List<Account>> call, Response<List<Account>> response) {
+                if(response.isSuccessful()) {
+                    showResponse(response.body().toString());
+                    Log.i(TAG, "account submitted to API." + response.body().toString());
+
+                    List<Account> instructorList = response.body();
+                    account = instructorList.get(0);
+
+                    //if (mView != null) mView.populateInstructorData(account);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Account>> call, Throwable t) {
+                showResponse(t.toString());
+                Log.e(TAG, "Unable to submit account to API.");
+            }
+        });
+
+        return account;
+    }
+
+    @Override
+    public Venue getVenue(int venueid) {
+        Log.e(TAG, "venueidX " + venueid);
+        mAPIService.getVenueById(venueid).enqueue(new Callback<List<Venue>>() {
+            @Override
+            public void onResponse(Call<List<Venue>> call, Response<List<Venue>> response) {
+                if(response.isSuccessful()) {
+                    showResponse(response.body().toString());
+                    Log.i(TAG, "venue submitted to API." + response.body().toString());
+
+                    List<Venue> venueList = response.body();
+                    venue = venueList.get(0);
+
+                    //if (mView != null) mView.populateVenueData(venue);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Venue>> call, Throwable t) {
+                showResponse(t.toString());
+                Log.e(TAG, "Unable to submit venue to API." + t);
+            }
+        });
+
+        return venue;
     }
 }
