@@ -17,7 +17,7 @@ Not yet available on playstore
 * Users with administrator permission can assign users new roles.
 * Login with social media and share events to social media.
 
-![alt text](http://www.jakebreen.co.uk/images/event_screen.jpg) ![alt text](http://www.jakebreen.co.uk/images/event_purchase.jpg) ![alt text](http://www.jakebreen.co.uk/images/event_create.jpg)
+![alt text](http://www.jakebreen.co.uk/images/se_class_list.jpg.jpg) ![alt text](http://www.jakebreen.co.uk/images/se_ticket_purchase.jpg.jpg) ![alt text](http://www.jakebreen.co.uk/images/se_ticket_screen.jpg.jpg)
 
 
 # Design
