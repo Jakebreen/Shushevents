@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +120,10 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
             tvEventTitle.setText(ticket.getTitle());
             tvEventDate.setText(ticket.getDate());
             tvEventTime.setText(ticket.getTime());
-            tvEventTicketPrice.setText(ticket.getEntryFee());
+
+            BigDecimal totalFee = new BigDecimal(ticket.getEntryFee()).multiply(BigDecimal.valueOf(ticket.getEntrants()));
+
+            tvEventTicketPrice.setText(String.valueOf(totalFee));
             tvEventPersonsPaid.setText(String.valueOf(ticket.getEntrants()));
 
             Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + ticket.getCoverImage()).fit().into(ivEventImage);
