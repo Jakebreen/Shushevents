@@ -1,18 +1,11 @@
 package uk.co.jakebreen.shushevents.presenter.impl;
 
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -165,75 +158,6 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
     }
 
     @Override
-    public boolean validateForm(String handle, String address, String town, String postcode, Double lat, Double lng) {
-
-        if (handle.equals(null) || handle.equals("")) {
-            mView.showToast("Venue name field empty");
-            return false;
-        } else if (address.equals(null) || address.equals("")) {
-            mView.showToast("Address field empty");
-            return false;
-        } else if (town.equals(null) || town.equals("")) {
-            mView.showToast("Town field empty");
-            return false;
-        } else if (postcode.equals(null) || postcode.equals("")) {
-            mView.showToast("Postcode field empty");
-            return false;
-        } else if (lat == null || lng == null || lat == 0.0 || lng == 0.0) {
-            mView.showToast("Must place a map marker");
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public void sendVenue(String handle, String address, String town, String postcode, Double lat, Double lng) {
-        mAPIService.saveVenue(handle, address, town, postcode, lat, lng).enqueue(new Callback<Venue>() {
-            @Override
-            public void onResponse(Call<Venue> call, Response<Venue> response) {
-                if(response.isSuccessful()) {
-                    showResponse(response.body().toString());
-                    Log.i(TAG, "venue submitted to API." + response.body().toString());
-                    mView.showToast("New venue created");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Venue> call, Throwable t) {
-                showResponse(t.toString());
-                Log.e(TAG, "Unable to submit venue to API.");
-                mView.showToast("Error creating new venue");
-            }
-        });
-
-    }
-
-    @Override
-    public void getVenues() {
-        mAPIService.getVenue().enqueue(new Callback<List<Venue>>() {
-            @Override
-            public void onResponse(Call<List<Venue>> call, Response<List<Venue>> response) {
-                if(response.isSuccessful()) {
-                    showResponse(response.body().toString());
-
-                    List<Venue> venueList = response.body();
-                    mView.displayVenueSpinner(venueList);
-
-                    Log.i(TAG, "Venue request submitted to API." + response.body().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Venue>> call, Throwable t) {
-                mView.showToast("Unable to find venues");
-                showResponse(t.toString());
-                Log.e(TAG, "Unable to submit venue request to API.");
-            }
-        });
-    }
-
-    @Override
     public void getInstructors() {
         mAPIService.getInstructors().enqueue(new Callback<List<Instructor>>() {
             @Override
@@ -261,22 +185,6 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
                 Log.e(TAG, "Unable to submit instructor request to API.");
             }
         });
-    }
-
-    @Override
-    public LatLng getLocation(String postcode, Context context) {
-        LatLng latLng = null;
-        try {
-            Geocoder geocoder = new Geocoder(context);
-            List<Address> addresses;
-            addresses = geocoder.getFromLocationName(postcode, 1);
-            if (addresses.size() > 0) {
-                latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return latLng;
     }
 
     @Override
@@ -324,34 +232,6 @@ public final class CreateEventPresenterImpl extends BasePresenterImpl<CreateEven
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 t.printStackTrace();
-            }
-        });
-    }
-
-    @Override
-    public void getCoverImages() {
-        mAPIService.getCoverImages().enqueue(new Callback<ArrayList<String>>() {
-            @Override
-            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
-                if(response.isSuccessful()) {
-                    showResponse(response.body().toString());
-
-                    ArrayList<String> coverImageList = response.body();
-
-                    if (mView == null) {
-                        Log.i(TAG, "mView is null." + response.body().toString());
-                    } else {
-                        mView.displayCoverImageList(coverImageList);
-                    }
-                    Log.i(TAG, "Image request submitted to API." + response.body().toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
-                mView.showToast("Unable to find imges");
-                showResponse(t.toString());
-                Log.e(TAG, "Unable to submit image request to API.");
             }
         });
     }

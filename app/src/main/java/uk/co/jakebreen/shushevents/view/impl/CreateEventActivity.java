@@ -1,49 +1,32 @@
 package uk.co.jakebreen.shushevents.view.impl;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +39,6 @@ import butterknife.OnTouch;
 import uk.co.jakebreen.shushevents.R;
 import uk.co.jakebreen.shushevents.data.model.Instructor;
 import uk.co.jakebreen.shushevents.data.model.Venue;
-import uk.co.jakebreen.shushevents.data.remote.APIService;
 import uk.co.jakebreen.shushevents.injection.AppComponent;
 import uk.co.jakebreen.shushevents.injection.CreateEventViewModule;
 import uk.co.jakebreen.shushevents.injection.DaggerCreateEventViewComponent;
@@ -64,7 +46,7 @@ import uk.co.jakebreen.shushevents.presenter.CreateEventPresenter;
 import uk.co.jakebreen.shushevents.presenter.loader.PresenterFactory;
 import uk.co.jakebreen.shushevents.view.CreateEventView;
 
-public final class CreateEventActivity extends BaseActivity<CreateEventPresenter, CreateEventView> implements CreateEventView, DatePickerDialog.OnDateSetListener, OnMapReadyCallback {
+public final class CreateEventActivity extends BaseActivity<CreateEventPresenter, CreateEventView> implements CreateEventView, DatePickerDialog.OnDateSetListener {
 
     private String TAG = CreateEventActivity.class.getSimpleName();
 
@@ -103,17 +85,11 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     protected FirebaseUser user;
     private int iTicketMax, iVenue;
     private DatePickerDialog datePickerDialog;
-    private Dialog venueDialog, coverImageDialog;
     private GoogleMap mMap;
-    private Double lat, lng;
-    private EditText etCreateVenueTitle, etCreateVenueAddress, etCreateVenueTown, etCreateVenuePostcode;
-    private Spinner spnVenue;
     private Venue mVenue;
     private Instructor mInstructor;
-    private ListView lvCoverImageList;
     private String selectedCoverImage;
 
-    private APIService mImageAPIService;
     private Uri resultUri;
 
     @Override
@@ -137,19 +113,6 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
 
         datePickerDialog = new DatePickerDialog(
                 this, this, startYear, startMonth, startDay);
-
-        venueDialog = new Dialog(this);
-        venueDialog.setContentView(R.layout.dialog_venue_picker);
-        coverImageDialog = new Dialog(this);
-        coverImageDialog.setContentView(R.layout.dialog_coverimage_picker);
-
-        lvCoverImageList = (ListView) coverImageDialog.findViewById(R.id.lv_coverImageList);
-
-        etCreateVenueTitle = (EditText) venueDialog.findViewById(R.id.et_createVenueTitle);
-        etCreateVenueAddress = (EditText) venueDialog.findViewById(R.id.et_createVenueAddress);
-        etCreateVenueTown = (EditText) venueDialog.findViewById(R.id.et_createVenueTown);
-        etCreateVenuePostcode = (EditText) venueDialog.findViewById(R.id.et_createVenuePostcode);
-        spnVenue = (Spinner) venueDialog.findViewById(R.id.spn_venueList);
 
     }
 
@@ -257,175 +220,16 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     @OnTouch(R.id.et_createEventVenue)
     public boolean onTouchVenueDialog(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            venueDialog.setCancelable(false);
-
-            mPresenter.getVenues();
-
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-
-            Button btnSelectVenue = (Button) venueDialog.findViewById(R.id.btn_selectVenue);
-            Button btnClose = (Button) venueDialog.findViewById(R.id.btn_close);
-            Button btnCreateVenue = (Button) venueDialog.findViewById(R.id.btn_create);
-            final EditText etPostcode = (EditText) venueDialog.findViewById(R.id.et_createVenuePostcode);
-
-            etPostcode.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    String postcode = String.valueOf(etPostcode.getText());
-                    textChangeGetLocation(postcode);
-                }
-            });
-
-            btnSelectVenue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mVenue = (Venue) spnVenue.getSelectedItem();
-                    //null pointer below
-                    etCreateEventVenue.setText(mVenue.getHandle());
-                    closeDialog();
-                }
-            });
-
-            btnClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    closeDialog();
-                }
-            });
-
-            btnCreateVenue.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String venueTitle = etCreateVenueTitle.getText().toString();
-                    String venueAddress = etCreateVenueAddress.getText().toString();
-                    String venueTown = etCreateVenueTown.getText().toString();
-                    String venuePostcode = etCreateVenuePostcode.getText().toString();
-
-                    if (mPresenter.validateForm(venueTitle, venueAddress, venueTown, venuePostcode, lat, lng)) {
-                        mPresenter.sendVenue(venueTitle, venueAddress, venueTown, venuePostcode, lat, lng);
-                        closeDialog();
-                    }
-                }
-            });
-
-            venueDialog.show();
+            Intent i = new Intent(this, VenuePickerActivity.class);
+            startActivityForResult(i, 2);
         }
         return false;
     }
 
     @OnClick(R.id.iv_createEventImageHolder)
     public void onClickGetImage() {
-
-        mPresenter.getCoverImages();
-
-        //Button btnSelectImage = (Button) coverImageDialog.findViewById(R.id.btn_coverImageSelect);
-        Button btnUploadImage = (Button) coverImageDialog.findViewById(R.id.btn_coverImageUpload);
-        Button btnClose = (Button) coverImageDialog.findViewById(R.id.btn_coverImageCancel);
-
-
-
-        btnUploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeDialog();
-                cropImageTask();
-            }
-        });
-
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeDialog();
-            }
-        });
-
-        coverImageDialog.show();
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragStart..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onMarkerDragEnd(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragEnd..." + arg0.getPosition().latitude + "..." + arg0.getPosition().longitude);
-                lat = arg0.getPosition().latitude;
-                lng = arg0.getPosition().longitude;
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-            }
-
-            @Override
-            public void onMarkerDrag(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.i("System out", "onMarkerDrag...");
-            }
-        });
-    }
-
-    @Override
-    public void textChangeGetLocation(String postcode) {
-        LatLng latLng =  mPresenter.getLocation(postcode, this);
-
-        if (latLng != null) {
-            lat = latLng.latitude;
-            lng = latLng.longitude;
-        }
-
-        if (latLng != null) {
-            mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(latLng)
-                    .title("Venue").draggable(true));
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
-            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        }
-    }
-
-    @Override
-    public void closeDialog() {
-        etCreateVenueTitle.setText("");
-        etCreateVenueAddress.setText("");
-        etCreateVenueTown.setText("");
-        etCreateVenuePostcode.setText("");
-        lat = null;
-        lng = null;
-        venueDialog.dismiss();
-        coverImageDialog.dismiss();
-    }
-
-    @Override
-    public void displayVenueSpinner(List<Venue> venueList) {
-
-        ArrayAdapter<Venue> adapter = new ArrayAdapter<Venue>(this, android.R.layout.simple_list_item_1, android.R.id.text1, venueList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                Venue venue = getItem(position);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                text1.setText(venue.getHandle());
-
-                return view;
-            }
-        };
-        spnVenue.setAdapter(adapter);
+        Intent i = new Intent(this, ImagePickerActivity.class);
+        startActivityForResult(i, 1);
     }
 
     @Override
@@ -445,71 +249,27 @@ public final class CreateEventActivity extends BaseActivity<CreateEventPresenter
     }
 
     @Override
-    public void cropImageTask() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(4,1)
-                .setRequestedSize(660,165, CropImageView.RequestSizeOptions.RESIZE_EXACT)
-                //.setMinCropResultSize(330,60)
-                //.setMaxCropResultSize(330,60)
-                .start(this);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                selectedCoverImage = null;
-                resultUri = result.getUri();
-                iv_createEventImageHolder.setImageURI(resultUri);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
 
-    @Override
-    public void displayCoverImageList(ArrayList<String> coverImageList) {
-        // Construct the data source
-        ArrayList<String> arrayListCoverImage = new ArrayList<String>(coverImageList);
-        // Create the adapter to convert the array to views
-        CoverImageAdapter adapter = new CoverImageAdapter(this, arrayListCoverImage);
-        // Attach the adapter to a ListView
-        lvCoverImageList.setAdapter(adapter);
-    }
-
-    public class CoverImageAdapter extends ArrayAdapter<String> {
-
-        public CoverImageAdapter(Context context, ArrayList<String> arrayListCoverImage) {
-            super(context, 0, arrayListCoverImage);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // Get the data item for this position
-            String coverImage = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_coverimage_list, parent, false);
-            }
-
-            // Lookup view for data population
-            ImageView ivCoverImage = (ImageView) convertView.findViewById(R.id.iv_coverImage);
-
-            Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + coverImage).fit().into(ivCoverImage);
-
-            lvCoverImageList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                        long arg3) {
-                    resultUri = null;
-                    selectedCoverImage = (lvCoverImageList.getItemAtPosition(position).toString());
+                if (data.getStringExtra("selectImage") != null) {
+                    selectedCoverImage = data.getStringExtra("selectImage");
                     Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + selectedCoverImage).fit().into(iv_createEventImageHolder);
-                    closeDialog();
+                } else if (data.getStringExtra("uriResult") != null) {
+                    resultUri = Uri.parse(data.getStringExtra("uriResult"));
+                    iv_createEventImageHolder.setImageURI(resultUri);
                 }
-            });
-            return convertView;
+
+            }
+        }
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                mVenue = (Venue) data.getSerializableExtra("venue");
+                etCreateEventVenue.setText(mVenue.getHandle());
+            }
         }
     }
 }

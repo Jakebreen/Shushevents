@@ -124,8 +124,10 @@ public final class MyEventListActivity extends BaseActivity<MyEventListPresenter
 
             Picasso.get().load("http://jakebreen.co.uk/android/shushevents/classimages/" + ticket.getCoverImage()).fit().into(ivEventImage);
 
-            if (ticket.getRefunded() == 1) {
+            if (ticket.getRefunded() != 0) {
                 tvEventTicketCancelled.setText("This class has been cancelled and your ticket has been refunded.");
+            } else {
+                tvEventTicketCancelled.setVisibility(View.GONE);
             }
 
             // Return the completed view to render on screen
