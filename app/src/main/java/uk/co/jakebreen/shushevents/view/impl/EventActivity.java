@@ -158,15 +158,17 @@ public final class EventActivity extends BaseActivity<EventPresenter, EventView>
 
         latLng = new LatLng(venue.getLat(), venue.getLng());
 
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        if (mMap != null) {
+            mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        mMap.addMarker(new MarkerOptions().position(latLng)
-                .title(venue.getHandle()));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mMap.addMarker(new MarkerOptions().position(latLng)
+                    .title(venue.getHandle()));
+            //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
+            mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        mMap.getUiSettings().setAllGesturesEnabled(false);
+            mMap.getUiSettings().setAllGesturesEnabled(false);
+        }
 
         if (checkAvailability()) btnJoinClass.setEnabled(true);
     }

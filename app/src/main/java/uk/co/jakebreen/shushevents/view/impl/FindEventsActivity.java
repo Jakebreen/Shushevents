@@ -1,6 +1,7 @@
 package uk.co.jakebreen.shushevents.view.impl;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Pair;
@@ -99,5 +100,11 @@ public final class FindEventsActivity extends BaseActivity<FindEventsPresenter, 
     @Override
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.tv_discover)
+    public void openWebPage() {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.shushevents.com/services"));
+        startActivity(browserIntent);
     }
 }

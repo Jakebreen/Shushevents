@@ -45,7 +45,8 @@
                         android:hint="@string/et_createEventTitle"
                         android:inputType="textCapSentences"
                         android:paddingBottom="10dp"
-                        android:paddingTop="10dp" />
+                        android:paddingTop="10dp"
+                        android:maxLength="45"/>
 
                 </LinearLayout>
 

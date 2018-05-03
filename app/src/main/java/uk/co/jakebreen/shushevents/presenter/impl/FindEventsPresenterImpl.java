@@ -92,4 +92,8 @@ public final class FindEventsPresenterImpl extends BasePresenterImpl<FindEventsV
         return new Pair<>(0.0, 0.0);
     }
 
+    @Override
+    public void openWebsite() {
+
+    }
 }

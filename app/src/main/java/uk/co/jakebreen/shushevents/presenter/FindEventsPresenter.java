@@ -9,5 +9,6 @@ public interface FindEventsPresenter extends BasePresenter<FindEventsView> {
     void getClasses();
     boolean checkTownPostcode(String townPostcode);
     Pair<Double, Double> getLatLng(String townPostcode);
+    void openWebsite();
 
 }
