@@ -11,11 +11,10 @@ Not yet available on playstore
 
 # Features
 * Search for classes in local vicinity by town or postcode.
-* Browsable list of available classes detailing; distance from user, event location with map, remaining tickets, class details, prices and booking.
+* Browsable list of available classes detailing; distance from user, event location with map, remaining tickets, class details and prices.
 * Book and pay for classes in advance, issuing an e-ticket upon successful sale.
 * Users with Instructor permission can create new classes and update/delete existing classes.
 * Users with administrator permission can assign users new roles.
-* Login with social media and share events to social media.
 
 ![alt text](http://www.jakebreen.co.uk/images/se_events.jpg) ![alt text](http://www.jakebreen.co.uk/images/se_tickets.jpg)
 
